@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <mobi.upod.timedurationpicker.TimeDurationPickerPreference
+        android:key="pref_duration"
+        android:title="Reminder"
+        android:summary="Remind me in ${m:ss} minute(s)."
+        android:defaultValue="900000"/>
+</PreferenceScreen>
