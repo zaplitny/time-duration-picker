@@ -9,15 +9,15 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/timedurationpicker" />
-            <option value="$PROJECT_DIR$/timedurationpicker-sample" />
+            <option value="$PROJECT_DIR$/sample" />
+            <option value="$PROJECT_DIR$/time-duration-picker" />
           </set>
         </option>
         <option name="myModules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/timedurationpicker" />
-            <option value="$PROJECT_DIR$/timedurationpicker-sample" />
+            <option value="$PROJECT_DIR$/sample" />
+            <option value="$PROJECT_DIR$/time-duration-picker" />
           </set>
         </option>
       </GradleProjectSettings>

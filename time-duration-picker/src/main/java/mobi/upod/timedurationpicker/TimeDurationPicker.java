@@ -36,6 +36,7 @@ public class TimeDurationPicker extends FrameLayout {
     private final View separatorView;
     private final View numPad;
     private final Button[] numPadButtons;
+    private final Button numPadMeasureButton;
     private OnDurationChangedListener changeListener = null;
 
     /**
@@ -83,6 +84,7 @@ public class TimeDurationPicker extends FrameLayout {
         separatorView = findViewById(R.id.separator);
 
         numPad = findViewById(R.id.numPad);
+        numPadMeasureButton = (Button) findViewById(R.id.numPadMeasure);
         numPadButtons = new Button[] {
                 (Button) findViewById(R.id.numPad1), (Button) findViewById(R.id.numPad2), (Button) findViewById(R.id.numPad3),
                 (Button) findViewById(R.id.numPad4), (Button) findViewById(R.id.numPad5), (Button) findViewById(R.id.numPad6),
@@ -337,9 +339,8 @@ public class TimeDurationPicker extends FrameLayout {
         final int minDisplayHeight = Math.max(durationView.getMeasuredHeight(), touchableSize);
 
         // calculate size for num pad
-        final Button numPadButton = numPadButtons[0];
-        numPadButton.measure(dummyMeasureSpec, dummyMeasureSpec);
-        final int minNumPadButtonSize = Math.max(Math.max(numPadButton.getMeasuredHeight(), numPadButton.getMeasuredWidth()), touchableSize);
+        numPadMeasureButton.measure(dummyMeasureSpec, dummyMeasureSpec);
+        final int minNumPadButtonSize = Math.max(Math.max(numPadMeasureButton.getMeasuredHeight(), numPadMeasureButton.getMeasuredWidth()), touchableSize);
         final int minNumPadWidth = 3 * minNumPadButtonSize;
         final int minNumPadHeight = 4 * minNumPadButtonSize;
 

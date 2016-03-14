@@ -180,10 +180,11 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"/>
+            <Button
+                android:id="@+id/numPadMeasure"
+                style="@style/Widget.TimeDurationPicker.NumPadButton"
+                android:text="0"
+                android:visibility="invisible"/>
 
             <Button
                 android:id="@+id/numPad0"

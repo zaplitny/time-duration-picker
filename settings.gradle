@@ -1,1 +1,1 @@
-include ':timedurationpicker', ':timedurationpicker-sample'
+include ':time-duration-picker', ':sample'
