@@ -22,7 +22,7 @@ To use TimeDurationPicker in your android project simply include it using the fo
 [ ![Download](https://api.bintray.com/packages/svenwiegand/maven/time-duration-picker/images/download.svg) ](https://bintray.com/svenwiegand/maven/time-duration-picker/_latestVersion)
 ```groovy
 repositories {
-    maven { url 'https://dl.bintray.com/svenwiegand/maven' }
+    jcenter()
 }
 
 dependencies {
