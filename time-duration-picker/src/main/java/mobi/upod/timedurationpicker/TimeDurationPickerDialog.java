@@ -54,6 +54,19 @@ public class TimeDurationPickerDialog extends AlertDialog implements DialogInter
     }
 
     /**
+     * Creates a time duration picker dialog.
+     * @param context the context for the dialog
+     * @param listener the listener to be informed about entered duration
+     * @param duration the initial duration to be shown in the dialog
+     * @param timeUnits the units of time to display
+     */
+    public TimeDurationPickerDialog(Context context, OnDurationSetListener listener, long duration, int timeUnits) {
+
+        this(context,listener,duration);
+        durationInputView.setTimeUnits(timeUnits);
+    }
+
+    /**
      * Gets the current entered duration.
      * @return the current duration in milliseconds.
      */

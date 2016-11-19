@@ -20,7 +20,7 @@ public abstract class TimeDurationPickerDialogFragment
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new TimeDurationPickerDialog(getActivity(), this, getInitialDuration());
+        return new TimeDurationPickerDialog(getActivity(), this, getInitialDuration(), setTimeUnits());
     }
 
     /**
@@ -29,5 +29,9 @@ public abstract class TimeDurationPickerDialogFragment
      */
     protected long getInitialDuration() {
         return 0;
+    }
+
+    protected int setTimeUnits(){
+        return TimeDurationPicker.HH_MM_SS;
     }
 }

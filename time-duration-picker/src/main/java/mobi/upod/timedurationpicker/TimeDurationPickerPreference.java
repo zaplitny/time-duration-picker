@@ -94,8 +94,12 @@ public class TimeDurationPickerPreference extends DialogPreference {
     @Override
     protected View onCreateDialogView() {
         final LayoutInflater inflater = LayoutInflater.from(getContext());
-        picker = (TimeDurationPicker) inflater.inflate(R.layout.time_duration_picker_dialog, null);
+        picker = initPicker((TimeDurationPicker) inflater.inflate(R.layout.time_duration_picker_dialog, null));
         return picker;
+    }
+
+    private TimeDurationPicker initPicker(TimeDurationPicker timePicker) {
+        return timePicker;
     }
 
     @Override
