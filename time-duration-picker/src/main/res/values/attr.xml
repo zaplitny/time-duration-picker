@@ -2,7 +2,7 @@
 <resources>
     <declare-styleable name="TimeDurationPicker">
         <!-- Unit to display in widget-->
-        <attr name="units" format="enum">
+        <attr name="timeUnits" format="enum">
             <enum name="hhmmss" value="0"/>
             <enum name="hhmm" value="1"/>
             <enum name="mmss" value="2"/>
