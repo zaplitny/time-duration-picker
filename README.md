@@ -68,7 +68,7 @@ but following [Android's Pickers guide](https://developer.android.com/guide/topi
 use it by implementing a [DialogFragment](https://developer.android.com/reference/android/support/v4/app/DialogFragment.html) instead
 to gracefully handle orientation changes.
 
-Fortunately TimeDurationPicker library already provides a matching base class for this use case: `TimeDurationPickerDialogFragment`. Implement the `onDurationSet()` method to handle the new duration when the user closed the dialog using the OK button. Optionally you can override the `getInitialDuration()` method to provide a duration that should be shown initially, when the dialog is brought up.
+Fortunately TimeDurationPicker library already provides a matching base class for this use case: `TimeDurationPickerDialogFragment`. Implement the `onDurationSet()` method to handle the new duration when the user closed the dialog using the OK button. Optionally you can override the `getInitialDuration()` method to provide a duration that should be shown initially, when the dialog is brought up. You may also override `setTimeUnits()` to modify the units of time displayed on the widget.
 
 From the sample application:
 ```java
@@ -81,6 +81,14 @@ public class PickerDialogFragment extends TimeDurationPickerDialogFragment {
     protected long getInitialDuration() {
         return 15 * 60 * 1000;
     }
+
+
+    @Override
+    protected int setTimeUnits() {
+        return TimeDurationPicker.HH_MM;
+    }
+
+
 
     @Override
     public void onDurationSet(TimeDurationPicker view, long duration) {
@@ -118,6 +126,7 @@ TimeDurationPicker provides various custom attributes to adjust its style (publi
 - **`separatorColor`:** Color of the separator line between the display row and the number pad. Defaults to `?colorControlActivated` from the appcompat.
 - **`durationDisplayBackground`:** Background color for the display area. Transparent by default. Used for example in the dialog style.
 - **`numPadButtonPadding`:** Specifies the padding for the number pad buttons.
+- **`timeUnits`:** Specifies the units of time to display.
 
 They can be set directly within the layout file like this:
 ```xml
@@ -137,7 +146,8 @@ They can be set directly within the layout file like this:
         app:clearIcon="@drawable/ic_clear_light"
         app:separatorColor="?colorControlActivated"
         app:durationDisplayBackground="@android:color/transparent"
-        app:numPadButtonPadding="0dp"/>
+        app:numPadButtonPadding="0dp"
+        app:timeUnits="hhmm"/>
 </FrameLayout>
 ```
 
