@@ -12,9 +12,9 @@ import android.widget.*;
 /**
  * Control that allows the user to easily input a time duration made up of hours, minutes and seconds, like known from
  * the Lollipop stock timer app.
- * <p>
+ *
  * See {@link R.styleable#TimeDurationPicker_textAppearanceDisplay},
- * {@link R.styleable#TimeDurationPicker_units},
+ * {@link R.styleable#TimeDurationPicker_timeUnits},
  * {@link R.styleable#TimeDurationPicker_textAppearanceUnit},
  * {@link R.styleable#TimeDurationPicker_textAppearanceButton},
  * {@link R.styleable#TimeDurationPicker_backspaceIcon},
@@ -29,7 +29,7 @@ public class TimeDurationPicker extends FrameLayout {
     public static final int HH_MM = 1;
     public static final int MM_SS = 2;
 
-    private int timeUnits = 0;
+    private int timeUnits = HH_MM_SS;
 
     private final TimeDurationString input = new TimeDurationString();
     private final View displayRow;
@@ -56,8 +56,7 @@ public class TimeDurationPicker extends FrameLayout {
     public interface OnDurationChangedListener {
         /**
          * Called whenever the input (the displayed duration string) changes.
-         *
-         * @param view     the view that fired the event
+         * @param view the view that fired the event
          * @param duration the new duration in milli seconds
          */
         void onDurationChanged(TimeDurationPicker view, long duration);
@@ -83,12 +82,12 @@ public class TimeDurationPicker extends FrameLayout {
         hoursView = (TextView) findViewById(R.id.hours);
         minutesView = (TextView) findViewById(R.id.minutes);
         secondsView = (TextView) findViewById(R.id.seconds);
-        displayViews = new TextView[]{hoursView, minutesView, secondsView};
+        displayViews = new TextView[] { hoursView, minutesView, secondsView };
 
         hoursLabel = (TextView) findViewById(R.id.hoursLabel);
         minutesLabel = (TextView) findViewById(R.id.minutesLabel);
         secondsLabel = (TextView) findViewById(R.id.secondsLabel);
-        unitLabelViews = new TextView[]{hoursLabel, minutesLabel, secondsLabel};
+        unitLabelViews = new TextView[] { hoursLabel, minutesLabel, secondsLabel };
 
         backspaceButton = (ImageButton) findViewById(R.id.backspace);
         clearButton = (ImageButton) findViewById(R.id.clear);
@@ -97,41 +96,31 @@ public class TimeDurationPicker extends FrameLayout {
 
         numPad = findViewById(R.id.numPad);
         numPadMeasureButton = (Button) findViewById(R.id.numPadMeasure);
-        numPadButtons = new Button[]{
-                (Button) findViewById(R.id.numPad1), (Button) findViewById(
-                R.id.numPad2), (Button) findViewById(R.id.numPad3),
-                (Button) findViewById(R.id.numPad4), (Button) findViewById(
-                R.id.numPad5), (Button) findViewById(R.id.numPad6),
-                (Button) findViewById(R.id.numPad7), (Button) findViewById(
-                R.id.numPad8), (Button) findViewById(R.id.numPad9),
+        numPadButtons = new Button[] {
+                (Button) findViewById(R.id.numPad1), (Button) findViewById(R.id.numPad2), (Button) findViewById(R.id.numPad3),
+                (Button) findViewById(R.id.numPad4), (Button) findViewById(R.id.numPad5), (Button) findViewById(R.id.numPad6),
+                (Button) findViewById(R.id.numPad7), (Button) findViewById(R.id.numPad8), (Button) findViewById(R.id.numPad9),
                 (Button) findViewById(R.id.numPad0), (Button) findViewById(R.id.numPad00)
         };
 
         //
         // apply style
         //
-        final TypedArray attributes = context.getTheme().obtainStyledAttributes(attrs,
-                R.styleable.TimeDurationPicker, defStyleAttr, 0);
+        final TypedArray attributes = context.getTheme().obtainStyledAttributes(attrs, R.styleable.TimeDurationPicker, defStyleAttr, 0);
         try {
-            applyPadding(attributes, R.styleable.TimeDurationPicker_numPadButtonPadding,
-                    numPadButtons);
+            applyPadding(attributes, R.styleable.TimeDurationPicker_numPadButtonPadding, numPadButtons);
 
-            applyTextAppearance(context, attributes,
-                    R.styleable.TimeDurationPicker_textAppearanceDisplay, displayViews);
-            applyTextAppearance(context, attributes,
-                    R.styleable.TimeDurationPicker_textAppearanceButton, numPadButtons);
-            applyTextAppearance(context, attributes,
-                    R.styleable.TimeDurationPicker_textAppearanceUnit, unitLabelViews);
+            applyTextAppearance(context, attributes, R.styleable.TimeDurationPicker_textAppearanceDisplay, displayViews);
+            applyTextAppearance(context, attributes, R.styleable.TimeDurationPicker_textAppearanceButton, numPadButtons);
+            applyTextAppearance(context, attributes, R.styleable.TimeDurationPicker_textAppearanceUnit, unitLabelViews);
 
             applyIcon(attributes, R.styleable.TimeDurationPicker_backspaceIcon, backspaceButton);
             applyIcon(attributes, R.styleable.TimeDurationPicker_clearIcon, clearButton);
 
-            applyBackgroundColor(attributes, R.styleable.TimeDurationPicker_separatorColor,
-                    separatorView);
-            applyBackgroundColor(attributes,
-                    R.styleable.TimeDurationPicker_durationDisplayBackground, displayRow);
+            applyBackgroundColor(attributes, R.styleable.TimeDurationPicker_separatorColor, separatorView);
+            applyBackgroundColor(attributes, R.styleable.TimeDurationPicker_durationDisplayBackground, displayRow);
 
-            applyUnits(attributes, R.styleable.TimeDurationPicker_units);
+            applyUnits(attributes, R.styleable.TimeDurationPicker_timeUnits);
         } finally {
             attributes.recycle();
         }
@@ -172,10 +161,10 @@ public class TimeDurationPicker extends FrameLayout {
     }
 
     private void updateUnits() {
-        hoursView.setVisibility(timeUnits == 0 || timeUnits == 1 ? View.VISIBLE : View.GONE);
-        hoursLabel.setVisibility(timeUnits == 0 || timeUnits == 1 ? View.VISIBLE : View.GONE);
-        secondsView.setVisibility(timeUnits == 0 || timeUnits == 2 ? View.VISIBLE : View.GONE);
-        secondsLabel.setVisibility(timeUnits == 0 || timeUnits == 2 ? View.VISIBLE : View.GONE);
+        hoursView.setVisibility(timeUnits == HH_MM_SS || timeUnits == HH_MM ? View.VISIBLE : View.GONE);
+        hoursLabel.setVisibility(timeUnits == HH_MM_SS || timeUnits == HH_MM ? View.VISIBLE : View.GONE);
+        secondsView.setVisibility(timeUnits == HH_MM_SS || timeUnits == MM_SS ? View.VISIBLE : View.GONE);
+        secondsLabel.setVisibility(timeUnits == HH_MM_SS || timeUnits == MM_SS ? View.VISIBLE : View.GONE);
 
         input.updateTimeUnits(timeUnits);
     }
@@ -192,7 +181,6 @@ public class TimeDurationPicker extends FrameLayout {
 
     /**
      * Gets the current duration entered by the user.
-     *
      * @return the duration entered by the user in milliseconds.
      */
     public long getDuration() {
@@ -201,7 +189,6 @@ public class TimeDurationPicker extends FrameLayout {
 
     /**
      * Sets the current duration.
-     *
      * @param millis the duration in milliseconds
      */
     public void setDuration(long millis) {
@@ -211,7 +198,6 @@ public class TimeDurationPicker extends FrameLayout {
 
     /**
      * Sets time units to use
-     *
      * @param timeUnits One of {@link #HH_MM_SS}, {@link #HH_MM}, {@link #MM_SS}.
      */
 
@@ -222,7 +208,6 @@ public class TimeDurationPicker extends FrameLayout {
 
     /**
      * Sets a listener to be informed of updates to the entered duration.
-     *
      * @param listener the listener to be informed or {@code null} if no one should be informed.
      */
     public void setOnDurationChangeListener(OnDurationChangedListener listener) {
@@ -231,7 +216,6 @@ public class TimeDurationPicker extends FrameLayout {
 
     /**
      * Sets the text appearance for the entered duration (the large numbers in the upper area).
-     *
      * @param resId resource id of the style describing the text appearance.
      */
     public void setDisplayTextAppearance(int resId) {
@@ -240,7 +224,6 @@ public class TimeDurationPicker extends FrameLayout {
 
     /**
      * Sets the text appearance for the small unit lables ("h", "m", "s") in the upper display area.
-     *
      * @param resId resource id of the style describing the text appearance.
      */
     public void setUnitTextAppearance(int resId) {
@@ -249,7 +232,6 @@ public class TimeDurationPicker extends FrameLayout {
 
     /**
      * Sets the text appearance for the number pad buttons.
-     *
      * @param resId resource id of the style describing the text appearance.
      */
     public void setButtonTextAppearance(int resId) {
@@ -258,7 +240,6 @@ public class TimeDurationPicker extends FrameLayout {
 
     /**
      * Sets the icon to be shown on the backspace button.
-     *
      * @param icon backspace drawable
      */
     public void setBackspaceIcon(Drawable icon) {
@@ -267,7 +248,6 @@ public class TimeDurationPicker extends FrameLayout {
 
     /**
      * Sets the icon for the clear button.
-     *
      * @param icon clear drawable
      */
     public void setClearIcon(Drawable icon) {
@@ -276,7 +256,6 @@ public class TimeDurationPicker extends FrameLayout {
 
     /**
      * Sets the color of the separator line between the duration display and the number pad.
-     *
      * @param color color value
      */
     public void setSeparatorColor(int color) {
@@ -285,7 +264,6 @@ public class TimeDurationPicker extends FrameLayout {
 
     /**
      * Sets the background color of the upper duration display area.
-     *
      * @param color color value
      */
     public void setDurationDisplayBackgroundColor(int color) {
@@ -294,7 +272,6 @@ public class TimeDurationPicker extends FrameLayout {
 
     /**
      * Sets the padding to be used for the number pad buttons.
-     *
      * @param padding padding in pixels
      */
     public void setNumPadButtonPadding(int padding) {
@@ -316,8 +293,7 @@ public class TimeDurationPicker extends FrameLayout {
         for (View view : targetViews) view.setPadding(padding, padding, padding, padding);
     }
 
-    private void applyTextAppearance(Context context, TypedArray attrs, int attributeIndex,
-            final TextView[] targetViews) {
+    private void applyTextAppearance(Context context, TypedArray attrs, int attributeIndex, final TextView[] targetViews) {
         final int id = attrs.getResourceId(attributeIndex, 0);
         if (id != 0) {
             applyTextAppearance(context, id, targetViews);
@@ -482,12 +458,9 @@ public class TimeDurationPicker extends FrameLayout {
      * Encapsulates the digit input logic and text to duration conversion logic.
      */
     private static class TimeDurationString {
-
         private int timeUnits;
-
         private int maxDigits = 6;
-
-        private final StringBuilder input = new StringBuilder(6);
+        private final StringBuilder input = new StringBuilder(maxDigits);
 
         public TimeDurationString() {
             padWithZeros();
