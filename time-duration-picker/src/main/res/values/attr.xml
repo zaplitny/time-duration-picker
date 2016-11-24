@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="TimeDurationPicker">
+        <!-- Unit to display in widget. -->
+        <attr name="timeUnits" format="enum">
+            <enum name="hhmmss" value="0"/>
+            <enum name="hhmm" value="1"/>
+            <enum name="mmss" value="2"/>
+        </attr>
         <!-- Text appearance of the currently entered duration (the large numbers in the upper area). -->
         <attr name="textAppearanceDisplay" format="reference"/>
         <!-- Text appearance of the small unit labels ("h", "m", "s"). -->

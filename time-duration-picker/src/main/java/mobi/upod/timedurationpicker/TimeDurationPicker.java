@@ -14,15 +14,23 @@ import android.widget.*;
  * the Lollipop stock timer app.
  *
  * See {@link R.styleable#TimeDurationPicker_textAppearanceDisplay},
- *  {@link R.styleable#TimeDurationPicker_textAppearanceUnit},
- *  {@link R.styleable#TimeDurationPicker_textAppearanceButton},
- *  {@link R.styleable#TimeDurationPicker_backspaceIcon},
- *  {@link R.styleable#TimeDurationPicker_clearIcon},
- *  {@link R.styleable#TimeDurationPicker_separatorColor},
- *  {@link R.styleable#TimeDurationPicker_durationDisplayBackground},
- *  {@link R.styleable#TimeDurationPicker_numPadButtonPadding}
+ * {@link R.styleable#TimeDurationPicker_timeUnits},
+ * {@link R.styleable#TimeDurationPicker_textAppearanceUnit},
+ * {@link R.styleable#TimeDurationPicker_textAppearanceButton},
+ * {@link R.styleable#TimeDurationPicker_backspaceIcon},
+ * {@link R.styleable#TimeDurationPicker_clearIcon},
+ * {@link R.styleable#TimeDurationPicker_separatorColor},
+ * {@link R.styleable#TimeDurationPicker_durationDisplayBackground},
+ * {@link R.styleable#TimeDurationPicker_numPadButtonPadding}
  */
 public class TimeDurationPicker extends FrameLayout {
+
+    public static final int HH_MM_SS = 0;
+    public static final int HH_MM = 1;
+    public static final int MM_SS = 2;
+
+    private int timeUnits = HH_MM_SS;
+
     private final TimeDurationString input = new TimeDurationString();
     private final View displayRow;
     private final View durationView;
@@ -38,6 +46,9 @@ public class TimeDurationPicker extends FrameLayout {
     private final Button[] numPadButtons;
     private final Button numPadMeasureButton;
     private OnDurationChangedListener changeListener = null;
+    private TextView secondsLabel;
+    private TextView hoursLabel;
+    private TextView minutesLabel;
 
     /**
      * Implement this interface and set it using #setOnDurationChangeListener to get informed about input changes.
@@ -73,9 +84,9 @@ public class TimeDurationPicker extends FrameLayout {
         secondsView = (TextView) findViewById(R.id.seconds);
         displayViews = new TextView[] { hoursView, minutesView, secondsView };
 
-        final TextView hoursLabel = (TextView) findViewById(R.id.hoursLabel);
-        final TextView minutesLabel = (TextView) findViewById(R.id.minutesLabel);
-        final TextView secondsLabel = (TextView) findViewById(R.id.secondsLabel);
+        hoursLabel = (TextView) findViewById(R.id.hoursLabel);
+        minutesLabel = (TextView) findViewById(R.id.minutesLabel);
+        secondsLabel = (TextView) findViewById(R.id.secondsLabel);
         unitLabelViews = new TextView[] { hoursLabel, minutesLabel, secondsLabel };
 
         backspaceButton = (ImageButton) findViewById(R.id.backspace);
@@ -108,6 +119,8 @@ public class TimeDurationPicker extends FrameLayout {
 
             applyBackgroundColor(attributes, R.styleable.TimeDurationPicker_separatorColor, separatorView);
             applyBackgroundColor(attributes, R.styleable.TimeDurationPicker_durationDisplayBackground, displayRow);
+
+            applyUnits(attributes, R.styleable.TimeDurationPicker_timeUnits);
         } finally {
             attributes.recycle();
         }
@@ -115,6 +128,9 @@ public class TimeDurationPicker extends FrameLayout {
         //
         // init actions
         //
+
+        updateUnits();
+
         backspaceButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,6 +160,21 @@ public class TimeDurationPicker extends FrameLayout {
         updateHoursMinutesSeconds();
     }
 
+    private void updateUnits() {
+        hoursView.setVisibility(timeUnits == HH_MM_SS || timeUnits == HH_MM ? View.VISIBLE : View.GONE);
+        hoursLabel.setVisibility(timeUnits == HH_MM_SS || timeUnits == HH_MM ? View.VISIBLE : View.GONE);
+        secondsView.setVisibility(timeUnits == HH_MM_SS || timeUnits == MM_SS ? View.VISIBLE : View.GONE);
+        secondsLabel.setVisibility(timeUnits == HH_MM_SS || timeUnits == MM_SS ? View.VISIBLE : View.GONE);
+
+        input.updateTimeUnits(timeUnits);
+    }
+
+    private void applyUnits(TypedArray attrs, int attributeIndex) {
+        if (attrs.hasValue(attributeIndex)) {
+            timeUnits = attrs.getInt(attributeIndex, 0);
+        }
+    }
+
     //
     // public interface
     //
@@ -163,6 +194,16 @@ public class TimeDurationPicker extends FrameLayout {
     public void setDuration(long millis) {
         input.setDuration(millis);
         updateHoursMinutesSeconds();
+    }
+
+    /**
+     * Sets time units to use
+     * @param timeUnits One of {@link #HH_MM_SS}, {@link #HH_MM}, {@link #MM_SS}.
+     */
+
+    public void setTimeUnits(int timeUnits) {
+        this.timeUnits = timeUnits;
+        updateUnits();
     }
 
     /**
@@ -279,7 +320,7 @@ public class TimeDurationPicker extends FrameLayout {
 
     private void applyLeftMargin(int margin, View... targetViews) {
         for (View view : targetViews) {
-            final RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) view.getLayoutParams();
+            final LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
             params.setMargins(margin, params.topMargin, params.rightMargin, params.bottomMargin);
             view.setLayoutParams(params);
         }
@@ -417,11 +458,22 @@ public class TimeDurationPicker extends FrameLayout {
      * Encapsulates the digit input logic and text to duration conversion logic.
      */
     private static class TimeDurationString {
-        private final int MAX_DIGITS = 6;
-        private final StringBuilder input = new StringBuilder(MAX_DIGITS);
+        private int timeUnits;
+        private int maxDigits = 6;
+        private final StringBuilder input = new StringBuilder(maxDigits);
 
         public TimeDurationString() {
             padWithZeros();
+        }
+
+        private void updateTimeUnits(int timeUnits) {
+            this.timeUnits = timeUnits;
+            setMaxDigits(timeUnits);
+        }
+
+        private void setMaxDigits(int timeUnits) {
+            if (timeUnits == TimeDurationPicker.HH_MM_SS) maxDigits = 6;
+            else maxDigits = 4;
         }
 
         public void pushNumber(final CharSequence digits) {
@@ -434,7 +486,7 @@ public class TimeDurationPicker extends FrameLayout {
                 throw new IllegalArgumentException("Only numbers are allowed");
 
             removeLeadingZeros();
-            if (input.length() < MAX_DIGITS && (input.length() > 0 || digit != '0')) {
+            if (input.length() < maxDigits && (input.length() > 0 || digit != '0')) {
                 input.append(digit);
             }
             padWithZeros();
@@ -452,15 +504,19 @@ public class TimeDurationPicker extends FrameLayout {
         }
 
         public String getHoursString() {
-            return input.substring(0, 2);
+            return timeUnits == HH_MM_SS || timeUnits == HH_MM ? input.substring(0, 2) : "00";
         }
 
         public String getMinutesString() {
-            return input.substring(2, 4);
+            if (timeUnits == HH_MM_SS || timeUnits == HH_MM) return input.substring(2, 4);
+            else if (timeUnits == MM_SS) return input.substring(0, 2);
+            else return "00";
         }
 
         public String getSecondsString() {
-            return input.substring(4, 6);
+            if (timeUnits == HH_MM_SS) return input.substring(4, 6);
+            else if (timeUnits == MM_SS) return input.substring(2, 4);
+            else return "00";
         }
 
         public String getInputString() {
@@ -495,7 +551,7 @@ public class TimeDurationPicker extends FrameLayout {
         }
 
         private void padWithZeros() {
-            while (input.length() < MAX_DIGITS)
+            while (input.length() < maxDigits)
                 input.insert(0, '0');
         }
 
