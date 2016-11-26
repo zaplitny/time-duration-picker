@@ -32,7 +32,7 @@ public class TimeDurationUtil {
     /**
      * Calculates the number of minutes within the specified duration excluding full hours.
      * @param duration duration in milliseconds
-     * @return number of minutes within the specified duration (<60).
+     * @return number of minutes within the specified duration.
      */
     public static int minutesInHourOf(long duration) {
         return (int) (duration - hoursOf(duration) * MILLIS_PER_HOUR) / MILLIS_PER_MINUTE;
@@ -50,7 +50,7 @@ public class TimeDurationUtil {
     /**
      * Calculates the number of seconds within the specified duration excluding full minutes.
      * @param duration duration in milliseconds
-     * @return number of seconds within the specified duration (<60).
+     * @return number of seconds within the specified duration.
      */
     public static int secondsInMinuteOf(long duration) {
         return (int) (duration - hoursOf(duration) * MILLIS_PER_HOUR - minutesInHourOf(duration) * MILLIS_PER_MINUTE) / MILLIS_PER_SECOND;
