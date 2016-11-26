@@ -27,7 +27,7 @@ repositories {
 }
 
 dependencies {
-    compile 'mobi.upod:time-duration-picker:1.0.3'
+    compile 'mobi.upod:time-duration-picker:1.1.0'
 }
 ```
 
