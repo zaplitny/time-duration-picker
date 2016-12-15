@@ -460,6 +460,7 @@ public class TimeDurationPicker extends FrameLayout {
     private static class TimeDurationString {
         private int timeUnits;
         private int maxDigits = 6;
+        private long duration = 0;
         private final StringBuilder input = new StringBuilder(maxDigits);
 
         public TimeDurationString() {
@@ -472,8 +473,11 @@ public class TimeDurationPicker extends FrameLayout {
         }
 
         private void setMaxDigits(int timeUnits) {
-            if (timeUnits == TimeDurationPicker.HH_MM_SS) maxDigits = 6;
-            else maxDigits = 4;
+            if (timeUnits == TimeDurationPicker.HH_MM_SS)
+                maxDigits = 6;
+            else
+                maxDigits = 4;
+            setDuration(duration);
         }
 
         public void pushNumber(final CharSequence digits) {
@@ -531,18 +535,27 @@ public class TimeDurationPicker extends FrameLayout {
         }
 
         public void setDuration(long millis) {
-            final long hours = TimeDurationUtil.hoursOf(millis);
-            final long minutes = TimeDurationUtil.minutesInHourOf(millis);
-            final long seconds = TimeDurationUtil.secondsInMinuteOf(millis);
+            duration = millis;
+            setDuration(
+                TimeDurationUtil.hoursOf(millis),
+                timeUnits == MM_SS ? TimeDurationUtil.minutesOf(millis) : TimeDurationUtil.minutesInHourOf(millis),
+                TimeDurationUtil.secondsInMinuteOf(millis));
+        }
+
+        private void setDuration(long hours, long minutes, long seconds) {
+            if (hours > 99 || minutes > 99)
+                setDurationString("99", "99", "99");
+            else
+                setDurationString(stringFragment(hours), stringFragment(minutes), stringFragment(seconds));
+        }
+
+        private void setDurationString(String hours, String minutes, String seconds) {
             input.setLength(0);
-            if (hours > 99) {
-                input.append("999999");
-            } else {
-                input
-                        .append(stringFragment(hours))
-                        .append(stringFragment(minutes))
-                        .append(stringFragment(seconds));
-            }
+            if (timeUnits == HH_MM || timeUnits == HH_MM_SS)
+                input.append(hours);
+            input.append(minutes);
+            if (timeUnits == HH_MM_SS || timeUnits == MM_SS)
+                input.append(seconds);
         }
 
         private void removeLeadingZeros() {
