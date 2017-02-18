@@ -98,7 +98,7 @@ public class TimeDurationPickerPreference extends DialogPreference {
         return picker;
     }
 
-    private TimeDurationPicker initPicker(TimeDurationPicker timePicker) {
+    protected TimeDurationPicker initPicker(TimeDurationPicker timePicker) {
         return timePicker;
     }
 
