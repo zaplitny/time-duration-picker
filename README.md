@@ -9,8 +9,9 @@ TimeDurationPicker is an Android library, that provides a component which makes 
 ![TimeDurationPickerDialog](https://github.com/svenwiegand/time-duration-picker/blob/master/wiki/dialog.png)
 
 # Who uses `TimeDurationPicker`
-- My podcast player [uPod](https://play.google.com/store/apps/details?id=mobi.upod.app)
 - [Rx Music Player](https://play.google.com/store/apps/details?id=com.mobymagic.musicplayer)
+- [Sessions: Social Music Practice Log](https://play.google.com/store/apps/details?id=co.apexpark.sessions)
+- **[Signal Messenger](https://play.google.com/store/apps/details?id=org.thoughtcrime.securesms)**
 
 Really would like to know who else is using `TimeDurationPicker`. Tell me and get listed here.
 
