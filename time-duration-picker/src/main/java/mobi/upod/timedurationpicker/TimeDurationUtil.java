@@ -5,11 +5,11 @@ package mobi.upod.timedurationpicker;
  */
 public class TimeDurationUtil {
     /** The number of milliseconds within a second. */
-    public static final int MILLIS_PER_SECOND = 1000;
+    public static final long MILLIS_PER_SECOND = 1000;
     /** The number of milliseconds within a minute. */
-    public static final int MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND;
+    public static final long MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND;
     /** The number of milliseconds within an hour. */
-    public static final int MILLIS_PER_HOUR = 60 * MILLIS_PER_MINUTE;
+    public static final long MILLIS_PER_HOUR = 60 * MILLIS_PER_MINUTE;
 
     /**
      * Calculates the number of hours within the specified duration.
@@ -17,7 +17,7 @@ public class TimeDurationUtil {
      * @return number of hours within the specified duration.
      */
     public static int hoursOf(long duration) {
-        return (int) duration / MILLIS_PER_HOUR;
+        return (int) (duration / MILLIS_PER_HOUR);
     }
 
     /**
@@ -26,7 +26,7 @@ public class TimeDurationUtil {
      * @return number of minutes within the specified duration.
      */
     public static int minutesOf(long duration) {
-        return (int) duration / MILLIS_PER_MINUTE;
+        return (int) (duration / MILLIS_PER_MINUTE);
     }
 
     /**
@@ -35,7 +35,7 @@ public class TimeDurationUtil {
      * @return number of minutes within the specified duration.
      */
     public static int minutesInHourOf(long duration) {
-        return (int) (duration - hoursOf(duration) * MILLIS_PER_HOUR) / MILLIS_PER_MINUTE;
+        return (int) ((duration - hoursOf(duration) * MILLIS_PER_HOUR) / MILLIS_PER_MINUTE);
     }
 
     /**
@@ -44,7 +44,7 @@ public class TimeDurationUtil {
      * @return number of seconds within the specified duration.
      */
     public static int secondsOf(long duration) {
-        return (int) duration / MILLIS_PER_SECOND;
+        return (int) (duration / MILLIS_PER_SECOND);
     }
 
     /**
@@ -53,7 +53,7 @@ public class TimeDurationUtil {
      * @return number of seconds within the specified duration.
      */
     public static int secondsInMinuteOf(long duration) {
-        return (int) (duration - hoursOf(duration) * MILLIS_PER_HOUR - minutesInHourOf(duration) * MILLIS_PER_MINUTE) / MILLIS_PER_SECOND;
+        return (int) ((duration - hoursOf(duration) * MILLIS_PER_HOUR - minutesInHourOf(duration) * MILLIS_PER_MINUTE) / MILLIS_PER_SECOND);
     }
 
     /**
@@ -64,7 +64,7 @@ public class TimeDurationUtil {
      * @return duration in milliseconds.
      */
     public static long durationOf(int hours, int minutes, int seconds) {
-        return hours * MILLIS_PER_HOUR + minutes * MILLIS_PER_MINUTE + seconds * MILLIS_PER_SECOND;
+        return (long)hours * MILLIS_PER_HOUR + minutes * MILLIS_PER_MINUTE + seconds * MILLIS_PER_SECOND;
     }
 
     /**
